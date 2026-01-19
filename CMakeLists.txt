@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(logan LANGUAGES CXX)
+
+add_executable(logan src/main.cpp)
+
+target_include_directories(logan PRIVATE
+		${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/third_party
+)
+
+target_compile_features(logan PRIVATE cxx_std_17)
