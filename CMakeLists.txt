@@ -9,8 +9,12 @@ add_executable(logan
 )
 
 target_include_directories(logan PRIVATE
-		${CMAKE_SOURCE_DIR}/include
+	${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/third_party
+)
+
+target_compile_definitions(logan PRIVATE
+    BUILD_DIR="${CMAKE_BINARY_DIR}"
 )
 
 target_compile_features(logan PRIVATE cxx_std_17)

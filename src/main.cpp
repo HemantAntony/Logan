@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <csignal>
 #include "../third_party/httplib.h"
 #include "../third_party/nlohmann/json.hpp"
 #include "../include/errors/http_error.h"
@@ -8,12 +9,30 @@
 #include "logging/logger.h"
 #include "sink/file_sink.h"
 
+#ifndef BUILD_DIR 							// To remove warnings. BUILD_DIR is set from CMakeLists.txt
+#define BUILD_DIR "./build"
+#endif
+
 using json = nlohmann::json;
 
+std::atomic<bool> shutdownRequested{false};
+
+void handleSignal(int sig) {
+	shutdownRequested.store(true, std::memory_order_relaxed);
+}
+
+void installSignalHandlers() {
+	std::signal(SIGTERM, handleSignal);
+	std::signal(SIGINT, handleSignal);
+	std::signal(SIGQUIT, handleSignal);
+}
+
 int main() {
+	installSignalHandlers();
+	
 	httplib::Server server;
 
-	auto fileSink = std::make_shared<FileSink>("log.txt");
+	auto fileSink = std::make_shared<FileSink>(std::string(BUILD_DIR) + "/log.txt");
 	Logger logger(fileSink);
 
 	server.Get("/health", [](const httplib::Request&, httplib::Response& res) {
@@ -84,7 +103,19 @@ int main() {
 		}
 	});
 
-	std::cout << "Starting server on http://localhost:8080\n";
-	server.listen("0.0.0.0", 8080);
+	std::thread serverThread([&server]() {
+		std::cout << "Starting server on http://localhost:8080\n";
+		server.listen("0.0.0.0", 8080);
+	});
+
+	while (!shutdownRequested.load(std::memory_order_relaxed)) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+
+	server.stop();
+	serverThread.join();
+
+	logger.flush();
+
 	return 0;
 }

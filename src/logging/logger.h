@@ -11,6 +11,7 @@ public:
   void addSink(const std::shared_ptr<Sink>& sink);
   
   void log(const LogRecord& record);
+  void flush();
 
 private:
   std::vector<std::shared_ptr<Sink>> sinks_;

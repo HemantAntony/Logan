@@ -12,3 +12,9 @@ void Logger::log(const LogRecord& record) {
     sink->write(record);
   }
 }
+
+void Logger::flush() {
+  for (const auto& sink : sinks_) {
+    sink->flush();
+  }
+}
