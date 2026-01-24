@@ -5,6 +5,7 @@ project(logan LANGUAGES CXX)
 add_executable(logan
     src/logging/logger.cpp
     src/sink/file_sink.cpp
+    src/sink/console_sink.cpp
     src/main.cpp
 )
 

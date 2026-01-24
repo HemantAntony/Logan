@@ -1,7 +1,6 @@
 #include "file_sink.h"
 #include "../logging/log_record.h"
 #include "../../include/errors/http_error.h"
-#include <iostream>
 
 FileSink::FileSink(const std::string& path)
   : file_(path, std::ios::app) {
@@ -12,6 +11,10 @@ FileSink::FileSink(const std::string& path)
 
 FileSink::~FileSink() {
   file_.close();
+}
+
+const std::string FileSink::name() const {
+  return "FileSink";
 }
 
 void FileSink::write(const LogRecord& record) {

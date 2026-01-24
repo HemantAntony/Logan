@@ -8,6 +8,7 @@
 #include "logging/log_record.h"
 #include "logging/logger.h"
 #include "sink/file_sink.h"
+#include "sink/console_sink.h"
 
 #ifndef BUILD_DIR 							// To remove warnings. BUILD_DIR is set from CMakeLists.txt
 #define BUILD_DIR "./build"
@@ -33,7 +34,9 @@ int main() {
 	httplib::Server server;
 
 	auto fileSink = std::make_shared<FileSink>(std::string(BUILD_DIR) + "/log.txt");
+	auto consoleSink = std::make_shared<ConsoleSink>();
 	Logger logger(fileSink);
+	logger.addSink(consoleSink);
 
 	server.Get("/health", [](const httplib::Request&, httplib::Response& res) {
 		json health {
