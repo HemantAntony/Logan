@@ -8,7 +8,7 @@ public:
   explicit FileSink(const std::string& path);
   ~FileSink() override;
 
-  const std::string name() const override;
+  std::string name() const override;
 
   void write(const LogRecord& record) override;
   void flush() override;

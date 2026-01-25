@@ -1,7 +1,7 @@
 #include "console_sink.h"
 #include <iostream>
 
-const std::string ConsoleSink::name() const {
+std::string ConsoleSink::name() const {
   return "ConsoleSink";
 }
 

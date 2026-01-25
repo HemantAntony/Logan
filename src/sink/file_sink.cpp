@@ -13,7 +13,7 @@ FileSink::~FileSink() {
   file_.close();
 }
 
-const std::string FileSink::name() const {
+std::string FileSink::name() const {
   return "FileSink";
 }
 

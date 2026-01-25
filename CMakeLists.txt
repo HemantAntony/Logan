@@ -3,10 +3,12 @@ cmake_minimum_required(VERSION 3.16)
 project(logan LANGUAGES CXX)
 
 add_executable(logan
+    src/main.cpp
     src/logging/logger.cpp
     src/sink/file_sink.cpp
     src/sink/console_sink.cpp
-    src/main.cpp
+    src/querying/querier.cpp
+    src/source/file_source.cpp
 )
 
 target_include_directories(logan PRIVATE

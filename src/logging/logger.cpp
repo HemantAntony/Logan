@@ -1,5 +1,4 @@
 #include "logger.h"
-#include <iostream>
 
 Logger::Logger(const std::shared_ptr<Sink>& sink)
   : sinks_{sink} {}

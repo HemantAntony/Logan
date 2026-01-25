@@ -4,8 +4,8 @@
 #include <string>
 
 struct LogRecord {
-  LogLevel level;
   int64_t timestamp;
   std::string service;
+  LogLevel level;
   std::string message;
 };
