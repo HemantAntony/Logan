@@ -37,12 +37,12 @@ int main() {
 	
 	httplib::Server server;
 
-	auto fileSink = std::make_shared<FileSink>(std::string(BUILD_DIR) + "/log.txt");
+	auto fileSink = std::make_shared<FileSink>(std::string(BUILD_DIR) + "/logs.txt");
 	auto consoleSink = std::make_shared<ConsoleSink>();
 	Logger logger(fileSink);
 	logger.addSink(consoleSink);
 
-	auto fileSource = std::make_shared<FileSource>(std::string(BUILD_DIR) + "/log.txt");
+	auto fileSource = std::make_shared<FileSource>(std::string(BUILD_DIR) + "/logs.txt");
 	Querier querier(fileSource);
 
 	server.Get("/health", [](const httplib::Request&, httplib::Response& res) {
@@ -164,6 +164,13 @@ int main() {
 
 			logger.log(record);
 
+			res.status = 201;
+			res.set_content(
+				json {
+					{ "success", "true" }
+				}.dump(),
+				"application/json"
+			);
 		} catch (const HttpError& e) {
 			res.status = e.status();
 			res.set_content(
