@@ -10,5 +10,4 @@ public:
   virtual std::string name() const = 0;
   
   virtual void write(const LogRecord& record) = 0;
-  virtual void flush() = 0;
 };

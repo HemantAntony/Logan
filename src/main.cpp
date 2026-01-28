@@ -194,7 +194,5 @@ int main() {
 	server.stop();
 	serverThread.join();
 
-	logger.flush();
-
 	return 0;
 }

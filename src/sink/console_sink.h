@@ -9,5 +9,4 @@ public:
   std::string name() const override;
 
   void write(const LogRecord& record) override;
-  void flush() override;
 };

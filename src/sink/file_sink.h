@@ -1,7 +1,13 @@
 #pragma once
 
+#include "../logging/log_record.h"
 #include "sink.h"
+#include <atomic>
+#include <condition_variable>
 #include <fstream>
+#include <mutex>
+#include <thread>
+#include <vector>
 
 class FileSink : public Sink {
 public:
@@ -9,13 +15,17 @@ public:
   ~FileSink() override;
 
   std::string name() const override;
-
-  void write(const LogRecord& record) override;
-  void flush() override;
+  
+  void shutdown();
+  void write(const LogRecord& log) override;
 
 private:
-  static constexpr int BUFFER_LIMIT = 100;
+  void loop();
 
+  std::vector<LogRecord> buffer_;
   std::ofstream file_;
-  int recordCount_ = 0;
+  std::mutex mutex_;
+  std::condition_variable cv_;
+  std::thread worker_;
+  std::atomic<bool> running_;
 };
