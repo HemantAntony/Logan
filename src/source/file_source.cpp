@@ -1,7 +1,6 @@
 #include "file_source.h"
 #include "../../include/errors/http_error.h"
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <string>
 
